@@ -1,0 +1,5 @@
+(C) 2018 August Schwerdfeger
+
+This software is distributed under the terms of the GNU Lesser General
+Public License, version 3 or later, the text of which may be found in
+LICENSE.txt in this directory.
