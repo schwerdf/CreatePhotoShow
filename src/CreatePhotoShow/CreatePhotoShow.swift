@@ -7,8 +7,11 @@
 
 import Foundation
 
-fileprivate let IMAGE_REGEX = "^(W\\.)?([A-Za-z][A-Za-z][A-Za-z]?)([-._ ].*)\\.[Jj][Pp]([Ee])?[Gg]"
-fileprivate let PREFIX_ELIMINATION_REGEX = "^([Ww]\\.)?([A-Za-z][A-Za-z][A-Za-z]?[-._ ].*)\\.[Jj][Pp]([Ee])?[Gg]"
+struct Regexes {
+    static let INITIALS_REGEX = "[A-Za-z][A-Za-z][A-Za-z]?"
+    static fileprivate let IMAGE_REGEX = "^(W\\.)?([A-Za-z][A-Za-z][A-Za-z]?)([-._ ].*)\\.[Jj][Pp]([Ee])?[Gg]"
+    static fileprivate let PREFIX_ELIMINATION_REGEX = "^([Ww]\\.)?([A-Za-z][A-Za-z][A-Za-z]?[-._ ].*)\\.[Jj][Pp]([Ee])?[Gg]"
+}
 
 
 func initialsComparator(s1: String, s2: String, prefixEliminationRegex: NSRegularExpression) -> Bool {
@@ -23,8 +26,8 @@ func initialsComparator(s1: String, s2: String, prefixEliminationRegex: NSRegula
 func dirContentsByInitials(_ dir: URL) throws -> [String:[String]] {
     let fileManager = FileManager.default
     
-    let imageRegex = try NSRegularExpression(pattern: IMAGE_REGEX)
-    let prefixEliminationRegex = try NSRegularExpression(pattern: PREFIX_ELIMINATION_REGEX)
+    let imageRegex = try NSRegularExpression(pattern: Regexes.IMAGE_REGEX)
+    let prefixEliminationRegex = try NSRegularExpression(pattern: Regexes.PREFIX_ELIMINATION_REGEX)
 
     var rv : [String:[String]] = [:]
     

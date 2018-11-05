@@ -1,12 +1,12 @@
 //
-//  ViewController.swift
+//  MainWindowViewController.swift
 //
 //  Copyright © 2018 August Schwerdfeger. All rights reserved.
 //
 
 import Cocoa
 
-class ViewController: NSViewController {
+class MainWindowViewController: NSViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -18,12 +18,13 @@ class ViewController: NSViewController {
         }
     }
 
+    @IBOutlet weak var getPhotosButton : NSButton? = nil
     @IBOutlet weak var createButton : NSButton? = nil
     @IBOutlet weak var photoDirectoryP : NSTextField? = nil
     @IBOutlet weak var invalidLabel : NSTextField? = nil
     @IBOutlet weak var photosPerPersonSelector: NSComboBox? = nil
     
-    private var photoDirectory : URL? = nil {
+    public var photoDirectory : URL? = nil {
         didSet {
             var isDir : ObjCBool = ObjCBool(false)
             if photoDirectory != nil &&
@@ -78,6 +79,7 @@ class ViewController: NSViewController {
             } else {
                 disableUI("No images in folder")
             }
+            getPhotosButton?.isEnabled = true
         } else {
             photoFilesByInitial = [:]
             disableUI("Invalid folder")
@@ -87,6 +89,7 @@ class ViewController: NSViewController {
     
     private func disableUI(_ message: String) {
         createButton?.isEnabled = false
+        getPhotosButton?.isEnabled = false
         photosPerPersonSelector?.isEnabled = false
         photosPerPersonSelector?.stringValue = ""
         invalidLabel?.textColor = NSColor.red
@@ -166,10 +169,16 @@ class ViewController: NSViewController {
     @IBAction func closeButtonWasPressed(_ sender: AnyObject) {
         NSApplication.shared.terminate(self)
     }
-    
+
+    override func prepare(for segue: NSStoryboardSegue, sender: Any?) {
+        if let destWindow = segue.destinationController as? NSWindowController,
+            let dest = destWindow.contentViewController as? GetPhotosWindowViewController {
+            dest.mainWindowController = self
+        }
+    }
 }
 
-extension ViewController: NSComboBoxDataSource {
+extension MainWindowViewController: NSComboBoxDataSource {
     func comboBox(_ comboBox: NSComboBox, indexOfItemWithStringValue: String) -> Int {
         return NSNotFound
     }
