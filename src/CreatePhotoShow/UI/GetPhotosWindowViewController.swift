@@ -42,15 +42,23 @@ class GetPhotosWindowViewController: NSViewController {
     
     var filesToCopy : [URL] = [] {
         didSet {
+            if initials == nil || initials! == "" {
+                do {
+                    let newInitials = try getInitials(files: filesToCopy)
+                    if Set(newInitials).count == 1 && newInitials[0] != "" {
+                        initialsFieldP?.stringValue = newInitials[0]
+                        initials = newInitials[0]
+                    }
+                } catch {
+                    // Intentionally left blank.
+                }
+            }
             updateUI(rereadTable: true)
         }
     }
     
     private func updateUI(rereadTable: Bool) {
         removeButton?.isEnabled = !(tableView?.selectedRowIndexes.isEmpty ?? true)
-        if let i = initials {
-            initialsFieldP?.stringValue = i
-        }
         copyButton?.isEnabled = (initialsAreValid && filesToCopy.count > 0)
         if rereadTable {
             tableView?.noteNumberOfRowsChanged()
@@ -72,7 +80,19 @@ class GetPhotosWindowViewController: NSViewController {
         let fileManager = FileManager.default
         if let photoDirectoryA = mainWindowController?.photoDirectory {
             for src in filesToCopy {
-                let dest = photoDirectoryA.appendingPathComponent((initials ?? "") + "." + src.lastPathComponent)
+                var initialsPrefix : String = (initials ?? "") + "."
+                do {
+                    let allInitials = try getInitials(files: filesToCopy)
+                    if Set(allInitials).count == 1,
+                       let initialsS = initials,
+                       allInitials[0] == initialsS {
+                        initialsPrefix = ""
+                    }
+                } catch {
+                    // Intentionally left blank.
+                }
+
+                let dest = photoDirectoryA.appendingPathComponent(initialsPrefix + src.lastPathComponent)
                 if fileManager.fileExists(atPath: dest.path) {
                     showErrorDialog("Failed", informativeText: "Failed to copy \(src.lastPathComponent): Already exists in target directory")
                     break

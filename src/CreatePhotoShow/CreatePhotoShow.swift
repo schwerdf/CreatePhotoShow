@@ -13,6 +13,22 @@ struct Regexes {
     static fileprivate let PREFIX_ELIMINATION_REGEX = "^([Ww]\\.)?([A-Za-z][A-Za-z][A-Za-z]?[-._ ].*)\\.[Jj][Pp]([Ee])?[Gg]"
 }
 
+func getInitials(files: [URL]) throws -> [String] {
+    let imageRegex = try NSRegularExpression(pattern: Regexes.IMAGE_REGEX)
+    
+    let rv : [String] = files.map { file in
+        let fileName = file.lastPathComponent
+        let m = imageRegex.matches(in: fileName, range: NSRange(location: 0, length: fileName.count))
+        if m.count > 0 {
+            let initialStartIndex = fileName.index(fileName.startIndex,offsetBy:m[0].range(at:2).location)
+           return String(fileName[initialStartIndex..<fileName.index(initialStartIndex, offsetBy:m[0].range(at:2).length)])
+        } else {
+            return ""
+        }
+    }
+    
+    return rv
+}
 
 func initialsComparator(s1: String, s2: String, prefixEliminationRegex: NSRegularExpression) -> Bool {
     let s1Match = prefixEliminationRegex.matches(in:s1,range:NSRange(location:0,length:s1.count))
