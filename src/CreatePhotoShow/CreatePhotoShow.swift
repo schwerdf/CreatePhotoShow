@@ -8,9 +8,10 @@
 import Foundation
 
 struct Regexes {
-    static let INITIALS_REGEX = "[A-Za-z][A-Za-z][A-Za-z]?"
-    static fileprivate let IMAGE_REGEX = "^(W\\.)?([A-Za-z][A-Za-z][A-Za-z]?)([-._ ].*)\\.[Jj][Pp]([Ee])?[Gg]"
-    static fileprivate let PREFIX_ELIMINATION_REGEX = "^([Ww]\\.)?([A-Za-z][A-Za-z][A-Za-z]?[-._ ].*)\\.[Jj][Pp]([Ee])?[Gg]"
+    static let INITIALS_REGEX = "\\w\\w\\w?"
+    static fileprivate let IMAGE_REGEX = "^(W\\.)?(\\w\\w\\w?)([-._ ]\\X*)\\.[Jj][Pp]([Ee])?[Gg]"
+    static fileprivate let PREFIX_ELIMINATION_REGEX = "^([Ww]\\.)?(\\w\\w\\w?[-._ ]\\X*)\\.[Jj][Pp]([Ee])?[Gg]"
+    static let REGEX_OPTIONS : NSRegularExpression.Options = [.useUnicodeWordBoundaries]
 }
 
 func getInitials(files: [URL]) throws -> [String] {
@@ -31,8 +32,8 @@ func getInitials(files: [URL]) throws -> [String] {
 }
 
 func initialsComparator(s1: String, s2: String, prefixEliminationRegex: NSRegularExpression) -> Bool {
-    let s1Match = prefixEliminationRegex.matches(in:s1,range:NSRange(location:0,length:s1.count))
-    let s2Match = prefixEliminationRegex.matches(in:s2,range:NSRange(location:0,length:s2.count))
+    let s1Match = prefixEliminationRegex.matches(in:s1,range:NSRange(0..<s1.utf16.count))
+    let s2Match = prefixEliminationRegex.matches(in:s2,range:NSRange(0..<s2.utf16.count))
     let s1Index = s1.index(s1.startIndex,offsetBy:s1Match[0].range(at:2).location)
     let s2Index = s2.index(s2.startIndex,offsetBy:s2Match[0].range(at:2).location)
     
@@ -42,15 +43,15 @@ func initialsComparator(s1: String, s2: String, prefixEliminationRegex: NSRegula
 func dirContentsByInitials(_ dir: URL) throws -> [String:[String]] {
     let fileManager = FileManager.default
     
-    let imageRegex = try NSRegularExpression(pattern: Regexes.IMAGE_REGEX)
-    let prefixEliminationRegex = try NSRegularExpression(pattern: Regexes.PREFIX_ELIMINATION_REGEX)
+    let imageRegex = try NSRegularExpression(pattern: Regexes.IMAGE_REGEX, options: Regexes.REGEX_OPTIONS)
+    let prefixEliminationRegex = try NSRegularExpression(pattern: Regexes.PREFIX_ELIMINATION_REGEX, options: Regexes.REGEX_OPTIONS)
 
     var rv : [String:[String]] = [:]
     
     let files = try fileManager.contentsOfDirectory(atPath:dir.path)
     
     for file in files {
-        let firstMatch = imageRegex.matches(in:file,range:NSRange(location:0,length:file.count))
+        let firstMatch = imageRegex.matches(in:file,range:NSRange(0..<file.utf16.count))
         if firstMatch.count > 0 {
             let initialStartIndex = file.index(file.startIndex,offsetBy:firstMatch[0].range(at:2).location)
             

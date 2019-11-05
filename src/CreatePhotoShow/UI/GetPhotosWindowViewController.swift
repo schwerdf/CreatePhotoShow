@@ -17,8 +17,8 @@ class GetPhotosWindowViewController: NSViewController {
         didSet {
             do {
                 if let str = initials {
-                    let imageRegex = try NSRegularExpression(pattern: Regexes.INITIALS_REGEX)
-                    let firstMatch = imageRegex.matches(in:str,range:NSRange(location:0,length:str.count))
+                    let imageRegex = try NSRegularExpression(pattern: Regexes.INITIALS_REGEX, options: Regexes.REGEX_OPTIONS)
+                    let firstMatch = imageRegex.matches(in:str,range:NSRange(0..<str.utf16.count))
                     initialsAreValid = firstMatch.count > 0
                 } else {
                     initialsAreValid = false
