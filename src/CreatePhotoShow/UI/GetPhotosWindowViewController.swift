@@ -186,7 +186,7 @@ extension GetPhotosWindowViewController: NSTableViewDataSource, NSTableViewDeleg
 }
 
 extension GetPhotosWindowViewController: NSTextFieldDelegate {
-    override func controlTextDidChange(_ obj: Notification) {
+    func controlTextDidChange(_ obj: Notification) {
         if let str = initialsFieldP?.stringValue,
             str.count > 3 {
             initialsFieldP?.stringValue = String(str.prefix(3))
