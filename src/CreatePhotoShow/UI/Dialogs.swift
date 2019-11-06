@@ -1,7 +1,7 @@
 //
 //  Dialogs.swift
 //
-//  Copyright © 2018 August Schwerdfeger. All rights reserved.
+//  Copyright © 2018 August Schwerdfeger
 //
 
 import Foundation
@@ -20,6 +20,21 @@ func chooseDirectory() -> URL? {
         return nil
     }
     return(url)
+}
+
+func chooseImages() -> [URL] {
+    let panel = NSOpenPanel()
+    
+    panel.canChooseFiles = true
+    panel.canChooseDirectories = false
+    panel.allowsMultipleSelection = true
+    
+    let result = panel.runModal()
+    
+    guard result == NSApplication.ModalResponse.OK, panel.urls.isEmpty == false else {
+        return []
+    }
+    return(panel.urls)
 }
 
 func showErrorDialog(_ messageText: String, informativeText: String) {

@@ -7,20 +7,22 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		CF031DDF20CCA0DC00214BE4 /* GetPhotosWindowViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF031DDE20CCA0DC00214BE4 /* GetPhotosWindowViewController.swift */; };
 		CF0C0840202A59DD00D2B887 /* CreatePhotoShow.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF0C083F202A59DD00D2B887 /* CreatePhotoShow.swift */; };
 		CF279A062036B00B00981559 /* Dialogs.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF279A052036B00B00981559 /* Dialogs.swift */; };
 		CF9B53EE1F63404800968A77 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF9B53ED1F63404800968A77 /* AppDelegate.swift */; };
-		CF9B53F01F63404800968A77 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF9B53EF1F63404800968A77 /* ViewController.swift */; };
+		CF9B53F01F63404800968A77 /* MainWindowViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF9B53EF1F63404800968A77 /* MainWindowViewController.swift */; };
 		CF9B53F21F63404800968A77 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CF9B53F11F63404800968A77 /* Assets.xcassets */; };
 		CF9B53F51F63404800968A77 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CF9B53F31F63404800968A77 /* Main.storyboard */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		CF031DDE20CCA0DC00214BE4 /* GetPhotosWindowViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetPhotosWindowViewController.swift; sourceTree = "<group>"; };
 		CF0C083F202A59DD00D2B887 /* CreatePhotoShow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreatePhotoShow.swift; sourceTree = "<group>"; };
 		CF279A052036B00B00981559 /* Dialogs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dialogs.swift; sourceTree = "<group>"; };
 		CF9B53EA1F63404800968A77 /* CreatePhotoShow.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CreatePhotoShow.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CF9B53ED1F63404800968A77 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		CF9B53EF1F63404800968A77 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		CF9B53EF1F63404800968A77 /* MainWindowViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainWindowViewController.swift; sourceTree = "<group>"; };
 		CF9B53F11F63404800968A77 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		CF9B53F41F63404800968A77 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		CF9B53F61F63404800968A77 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -41,9 +43,10 @@
 			isa = PBXGroup;
 			children = (
 				CF9B53ED1F63404800968A77 /* AppDelegate.swift */,
-				CF9B53EF1F63404800968A77 /* ViewController.swift */,
+				CF9B53EF1F63404800968A77 /* MainWindowViewController.swift */,
 				CF9B53F31F63404800968A77 /* Main.storyboard */,
 				CF279A052036B00B00981559 /* Dialogs.swift */,
+				CF031DDE20CCA0DC00214BE4 /* GetPhotosWindowViewController.swift */,
 			);
 			path = UI;
 			sourceTree = "<group>";
@@ -107,14 +110,14 @@
 				TargetAttributes = {
 					CF9B53E91F63404800968A77 = {
 						CreatedOnToolsVersion = 8.3.3;
-						LastSwiftMigration = 0920;
+						LastSwiftMigration = 1120;
 						ProvisioningStyle = Automatic;
 					};
 				};
 			};
 			buildConfigurationList = CF9B53E51F63404800968A77 /* Build configuration list for PBXProject "CreatePhotoShow" */;
 			compatibilityVersion = "Xcode 3.2";
-			developmentRegion = English;
+			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
@@ -147,7 +150,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CF9B53F01F63404800968A77 /* ViewController.swift in Sources */,
+				CF9B53F01F63404800968A77 /* MainWindowViewController.swift in Sources */,
+				CF031DDF20CCA0DC00214BE4 /* GetPhotosWindowViewController.swift in Sources */,
 				CF0C0840202A59DD00D2B887 /* CreatePhotoShow.swift in Sources */,
 				CF9B53EE1F63404800968A77 /* AppDelegate.swift in Sources */,
 				CF279A062036B00B00981559 /* Dialogs.swift in Sources */,
@@ -289,7 +293,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = name.schwerdfeger.CreatePhotoShow;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
@@ -304,7 +308,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = name.schwerdfeger.CreatePhotoShow;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
 		};
