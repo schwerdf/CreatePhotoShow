@@ -117,7 +117,7 @@
 			};
 			buildConfigurationList = CF9B53E51F63404800968A77 /* Build configuration list for PBXProject "CreatePhotoShow" */;
 			compatibilityVersion = "Xcode 3.2";
-			developmentRegion = English;
+			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,

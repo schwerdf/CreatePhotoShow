@@ -1,7 +1,7 @@
 //
 //  MainWindowViewController.swift
 //
-//  Copyright © 2018 August Schwerdfeger. All rights reserved.
+//  Copyright © 2018 August Schwerdfeger
 //
 
 import Cocoa

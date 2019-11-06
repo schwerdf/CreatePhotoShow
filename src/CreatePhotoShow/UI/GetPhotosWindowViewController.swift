@@ -1,7 +1,7 @@
 //
 //  GetPhotosWindowViewController.swift
 //
-//  Copyright © 2018 August Schwerdfeger. All rights reserved.
+//  Copyright © 2018-2019 August Schwerdfeger
 //
 
 import Foundation
@@ -33,6 +33,11 @@ class GetPhotosWindowViewController: NSViewController {
             updateUI(rereadTable: false)
         }
     }
+    private var copying: Bool = false {
+        didSet {
+            updateUI(rereadTable: false)
+        }
+    }
     @IBOutlet weak var initialsFieldP: NSTextField? = nil
     
     @IBOutlet weak var mainWindowController : MainWindowViewController? = nil/* {
@@ -59,7 +64,7 @@ class GetPhotosWindowViewController: NSViewController {
     
     private func updateUI(rereadTable: Bool) {
         removeButton?.isEnabled = !(tableView?.selectedRowIndexes.isEmpty ?? true)
-        copyButton?.isEnabled = (initialsAreValid && filesToCopy.count > 0)
+        copyButton?.isEnabled = (initialsAreValid && filesToCopy.count > 0 && !copying)
         if rereadTable {
             tableView?.noteNumberOfRowsChanged()
             tableView?.reloadData()
@@ -77,43 +82,69 @@ class GetPhotosWindowViewController: NSViewController {
     }
     
     @IBAction func copyButtonWasPressed(_ sender: AnyObject) {
+        copying = true
+        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+            guard let self = self else {
+              return
+            }
+            self.doFileCopy()
+        }
+    }
+    
+    func doFileCopy() {
+        var errorString : String? = nil
         let fileManager = FileManager.default
         if let photoDirectoryA = mainWindowController?.photoDirectory {
+            var allInitials : [String] = []
+            do {
+                allInitials = try getInitials(files: filesToCopy)
+            } catch {
+                // Intentionally left blank.
+            }
+            let allInitialsS = Set(allInitials)
+            
             for src in filesToCopy {
                 var initialsPrefix : String = (initials ?? "") + "."
-                do {
-                    let allInitials = try getInitials(files: filesToCopy)
-                    if Set(allInitials).count == 1,
-                       let initialsS = initials,
-                       allInitials[0] == initialsS {
-                        initialsPrefix = ""
-                    }
-                } catch {
-                    // Intentionally left blank.
+                if allInitialsS.count == 1,
+                   let initialsS = initials,
+                   allInitials[0] == initialsS {
+                    initialsPrefix = ""
                 }
 
                 let dest = photoDirectoryA.appendingPathComponent(initialsPrefix + src.lastPathComponent)
                 if fileManager.fileExists(atPath: dest.path) {
-                    showErrorDialog("Failed", informativeText: "Failed to copy \(src.lastPathComponent): Already exists in target directory")
+                    errorString = "Failed to copy \(src.lastPathComponent): Already exists in target directory"
                     break
                 }
                 do {
                     try fileManager.copyItem(at: src, to: dest)
-                    progressBar?.increment(by: 1.0 / Double(filesToCopy.count))
-                    progressBar?.display()
+                    DispatchQueue.main.async { [weak self] in
+                        guard let self = self else {
+                          return
+                        }
+                        self.progressBar?.increment(by: 100.0 / Double(self.filesToCopy.count))
+                    }
                 } catch {
-                    showErrorDialog("Failed",informativeText: "Failed to copy \(src.lastPathComponent)")
+                    errorString = "Failed to copy \(src.lastPathComponent)"
                     break
                 }
             }
         } else {
-            showErrorDialog("Failed",informativeText: "Copy failed")
+            errorString = "Copy failed"
         }
-        if let mwc = mainWindowController,
-            let pdp = mwc.photoDirectoryP {
-            mwc.pathTextDidChange(pdp)
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else {
+              return
+            }
+            if let errorStringS = errorString {
+                showErrorDialog("Failed",informativeText: errorStringS)
+            }
+            if let mwc = self.mainWindowController,
+                let pdp = mwc.photoDirectoryP {
+                mwc.pathTextDidChange(pdp)
+            }
+            self.view.window?.close()
         }
-        self.view.window?.close()
     }
     
     @IBAction func addButtonWasPressed(_ sender: AnyObject) {
