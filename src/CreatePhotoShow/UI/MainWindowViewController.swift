@@ -23,6 +23,7 @@ class MainWindowViewController: NSViewController {
     @IBOutlet weak var photoDirectoryP : NSTextField? = nil
     @IBOutlet weak var invalidLabel : NSTextField? = nil
     @IBOutlet weak var photosPerPersonSelector: NSComboBox? = nil
+    @IBOutlet weak var randomizeCheckBox: NSButton? = nil
     
     public var photoDirectory : URL? = nil {
         didSet {
@@ -36,6 +37,7 @@ class MainWindowViewController: NSViewController {
         }
     }
     
+    private var randomizePresenters : Bool = true
     private var totalPhotoCount : Int = 0
     private var maxPhotosPerPerson : Int = 0
     private var photoFilesByInitial : [String:[String]] = [:] {
@@ -146,7 +148,7 @@ class MainWindowViewController: NSViewController {
         }
         
         do {
-            try createPhotoSymlinks(photoFilesByInitial, photoDir: photoDirectoryA, linkDir: destPath, limit: selectedPhotosPerPerson)
+            try createPhotoSymlinks(photoFilesByInitial, photoDir: photoDirectoryA, linkDir: destPath, limit: selectedPhotosPerPerson, randomize: randomizePresenters)
         } catch {
             showErrorDialog("Error",informativeText: "Error creating photo show files")
             return
@@ -158,6 +160,10 @@ class MainWindowViewController: NSViewController {
             NSApplication.shared.terminate(self)
         }
 
+    }
+    
+    @IBAction func randomizeCheckBoxWasClicked(_ sender: AnyObject) {
+        randomizePresenters = randomizeCheckBox?.intValue != 0
     }
     
     @IBAction func browseButtonWasPressed(_ sender: AnyObject) {

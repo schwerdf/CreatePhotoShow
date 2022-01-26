@@ -83,14 +83,31 @@ func getMaxPhotosPerPerson(_ photoFilesByInitial: [String:[String]], hardLimit: 
     return Array(photoFilesByInitial.values).reduce(0) { max($0, min($1.count, hardLimit)) }
 }
 
-func createPhotoSymlinks(_ photoFilesByInitial: [String:[String]], photoDir: URL, linkDir: URL, limit: Int) throws {
+func createPhotoSymlinks(_ photoFilesByInitial: [String:[String]], photoDir: URL, linkDir: URL, limit: Int, randomize: Bool) throws {
     let fileManager = FileManager.default
-    let allPhotos = photoFilesByInitial.keys.reduce([]) {
-        $0 + photoFilesByInitial[$1]![0..<(min(photoFilesByInitial[$1]!.count,limit))]
+//    let allPhotos = photoFilesByInitial.keys.reduce([]) {
+//        $0 + photoFilesByInitial[$1]![0..<(min(photoFilesByInitial[$1]!.count,limit))]
+//    }
+//    for photo in allPhotos {
+//        try fileManager.createSymbolicLink(at: URL(fileURLWithPath: "\(linkDir.path)/\(photo)"),
+//                                           withDestinationURL: URL(fileURLWithPath: "\(photoDir.path)/\(photo)"))
+//    }
+    let linkNameFormatter = NumberFormatter()
+    linkNameFormatter.paddingCharacter = "0"
+    linkNameFormatter.minimumIntegerDigits = "\(photoFilesByInitial.count + 1)".count + 1
+    var initials = photoFilesByInitial.keys.sorted()
+    if randomize {
+        initials.shuffle()
     }
-    for photo in allPhotos {
-        try fileManager.createSymbolicLink(at: URL(fileURLWithPath: "\(linkDir.path)/\(photo)"),
-                                           withDestinationURL: URL(fileURLWithPath: "\(photoDir.path)/\(photo)"))
+    for i in 0..<initials.count {
+        for photo in photoFilesByInitial[initials[i]]![0..<(min(photoFilesByInitial[initials[i]]!.count,limit))] {
+            var linkName = "\(photo)"
+            if randomize {
+                linkName = "\(linkNameFormatter.string(from: NSNumber(value: i+1)) ?? "00").\(linkName)"
+            }
+            try fileManager.createSymbolicLink(at: URL(fileURLWithPath: "\(linkDir.path)/\(linkName)"),
+                                               withDestinationURL: URL(fileURLWithPath: "\(photoDir.path)/\(photo)"))
+        }
     }
 }
 
