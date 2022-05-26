@@ -42,7 +42,7 @@ class MainWindowViewController: NSViewController {
     private var maxPhotosPerPerson : Int = 0
     private var photoFilesByInitial : [String:[String]] = [:] {
         didSet {
-            maxPhotosPerPerson = getMaxPhotosPerPerson(photoFilesByInitial, hardLimit: 15)
+            maxPhotosPerPerson = getMaxPhotosPerPerson(photoFilesByInitial, hardLimit: 100)
         }
     }
     private var selectedPhotosPerPerson : Int = -1
