@@ -1,4 +1,4 @@
-Copyright © 2017-2019 August Schwerdfeger
+Copyright © 2017-2022 August Schwerdfeger
 
 This software is distributed under the terms of the GNU Lesser General
 Public License, version 3 or later, the text of which may be found in
